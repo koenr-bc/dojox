@@ -79,8 +79,8 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dojox/gfx","dojo/_base/array
 			if(s[0].chart.stack[0].declaredClass == "dojox.charting.plot2d.Pie"){
 				var t = s[0].chart.stack[0];
 				if(typeof t.run.data[0] == "number"){
-					var filteredRun = df.map(t.run.data, "Math.max(x, 0)");
-					var slices = df.map(filteredRun, "/this", df.foldl(filteredRun, "+", 0));
+					var filteredRun = df.map(t.run.data, x => Math.max(x, 0));
+					var slices = df.map(filteredRun, function(x) { return x / this; }, df.foldl(filteredRun, (a, b) => a + b, 0));
 					arr.forEach(slices, function(x, i){
 						this._addLabel(t.dyn[i], t._getLabel(x * 100) + "%");
 					}, this);

@@ -116,9 +116,9 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 					if(!this.angles){
 						// calculate the running total of slice angles
 						var filteredRun = typeof o.run.data[0] == "number" ?
-								df.map(o.run.data, "x ? Math.max(x, 0) : 0") : df.map(o.run.data, "x ? Math.max(x.y, 0) : 0");
-						this.angles = df.map(df.scanl(filteredRun, "+", 0),
-							"* 2 * Math.PI / this", df.foldl(filteredRun, "+", 0));
+								df.map(o.run.data, x => x ? Math.max(x, 0) : 0) : df.map(o.run.data, x => x ? Math.max(x.y, 0) : 0);
+						this.angles = df.map(df.scanl(filteredRun, (a, b) => a + b, 0),
+							function(x) { return x * 2 * Math.PI / this }, df.foldl(filteredRun, (a, b) => a + b, 0));
 					}
 					var startAngle = m._degToRad(o.plot.opt.startAngle),
 						angle = (this.angles[o.index] + this.angles[o.index + 1]) / 2 + startAngle;

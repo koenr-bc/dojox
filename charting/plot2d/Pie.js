@@ -261,24 +261,24 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", "dojo/dom-g
 				return this;
 			}
 			if(typeof run[0] == "number"){
-				filteredRun = df.map(run, "x ? Math.max(x, 0) : 0");
-				if(df.every(filteredRun, "<= 0")){
+				filteredRun = df.map(run, x => x ? Math.max(x, 0) : 0);
+				if(df.every(filteredRun, x => x <= 0)){
 					noDataFunc();
 					return this;
 				}
-				slices = df.map(filteredRun, "/this", df.foldl(filteredRun, "+", 0));
+				slices = df.map(filteredRun, function(x) { return x / this; }, df.foldl(filteredRun, (a, b) => a + b, 0));
 				if(this.opt.labels){
 					labels = arr.map(slices, function(x){
 						return x > 0 ? this._getLabel(x * 100) + "%" : "";
 					}, this);
 				}
 			}else{
-				filteredRun = df.map(run, "x ? Math.max(x.y, 0) : 0");
-				if(!filteredRun.length || df.every(filteredRun, "<= 0")){
+				filteredRun = df.map(run, x => x ? Math.max(x.y, 0) : 0);
+				if(!filteredRun.length || df.every(filteredRun, x => x <= 0)){
 					noDataFunc();
 					return this;
 				}
-				slices = df.map(filteredRun, "/this", df.foldl(filteredRun, "+", 0));
+				slices = df.map(filteredRun, function(x) { return x / this; }, df.foldl(filteredRun, (a, b) => a + b, 0));
 				if(this.opt.labels){
 					labels = arr.map(slices, function(x, i){
 						if(x < 0){ return ""; }
